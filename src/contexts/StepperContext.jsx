@@ -1,21 +1,22 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
+export const UserContext = createContext();
 
-const StepperContext = createContext({ userData: "", setUserData: null, listUser: [], values: {}, setValues: null, open: true, setOpen:null});
-
-export function UseContextProvider({ children }) {
-  const [userData, setUserData] = useState("");
-  const [open, setOpen] = useState(true);
-  const [values, setValues] = useState({});
+export const UserProvider = (props) => {
+  var [values, setValues] = useState({});
+  const [open, setOpen] = useState(true)
   const listUser = [];
+
   return (
-    <StepperContext.Provider value={{ userData, setUserData, listUser, values, setValues, open }}>
-      {children}
-    </StepperContext.Provider>
+    <UserContext.Provider
+      value={{
+         listUser,
+ 	 values,
+	 setValues,
+	 open,
+	 setOpen
+      }}
+    >
+      {props.children}
+    </UserContext.Provider>
   );
-}
-
-export function useStepperContext() {
-  const { userData, setUserData, values, setValues, open, setOpen } = useContext(StepperContext);
-
-  return { userData, setUserData, values, setValues, open, setOpen };
 }

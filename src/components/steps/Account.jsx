@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Grid, InputLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
-import { useStepperContext } from "../../contexts/StepperContext";
+// import { useStepperContext } from "../../contexts/StepperContext";
 import ListDropDown from "../ListDropDown";
+import { UserContext } from "../../contexts/StepperContext.jsx"
 import { useParams } from "react-router-dom";
 import { listDocument, listSex, listTravel } from "../../list";
 import { useEffect } from "react";
@@ -9,9 +10,9 @@ import { getDataFromCodePassenger } from "../service";
 
 export default function Account({step}) {
   // const { userData, setUserData } = useStepperContext();
-  const { listUser, values, setValues, userData, setUserData, open, setOpen } = useStepperContext();
+  var {listUser, values, setValues, open, setOpen } = useContext(UserContext);
+  //const {listUser} useContext(UserContext); 
   const [country, setCountry] = useState([]);
-
   const paperStyle = { marginTop: 180, marginBottom: 180, marginRight: 180, padding: 20, height: 'auto', width: 300 }
 
   // const [values, setValues] = useState({});
@@ -115,7 +116,6 @@ export default function Account({step}) {
         break;
       default:
     }
-    setUserData({ ...userData, [name]: value });
     setValues({
       ...values,
       [name]: value,
@@ -124,7 +124,7 @@ export default function Account({step}) {
       // lMigrado: lMigrado,
       // tCodigoPasajero: codePassenger[ids].tCodigoPasajero,
     });
-
+    console.log(Object.entries(values).length);
     if (
       errorTNombre === false &&
       errorTApellidoMaterno === false &&
@@ -132,10 +132,11 @@ export default function Account({step}) {
       errorTDocumento === false &&
       errorTDomicilio === false &&
       errorTelePhone === false &&
-      Object.entries(values).length === 14) {
-      setOpen(false)
+      Object.entries(values).length === 6) {
+      setOpen(false);
+      console.log("Valor seteado");
     } else {
-      setOpen(true)
+      setOpen(true);
     }
   };
   useEffect(() => {
@@ -193,12 +194,12 @@ export default function Account({step}) {
         </div>
       </div>
       <div className="my-2 gap-4 flex rounded border border-gray-200 bg-white p-1 justify-around items-center">
-        {/* <ListDropDown
+      {/* <ListDropDown
           text="Documento identidad:"
           list={listDocument}
           handleChangeInputs={handleChange}
           name="tTipoDocumento"
-        /> */}
+        />  */}
         <TextField
           error={errorTDocumento}
           variant="standard"
@@ -212,12 +213,12 @@ export default function Account({step}) {
         />
       </div>
       <div className="my-2 gap-4 flex rounded border border-gray-200 bg-white p-1 justify-around">
-        {/* <ListDropDown
+       {/* <ListDropDown
           text="Ingrese su género:"
           list={listSex}
           handleChangeInputs={handleChange}
           name="tSexo"
-        />
+        /> 
         <ListDropDown
           text="Motivo de viaje:"
           list={listTravel}
@@ -226,7 +227,7 @@ export default function Account({step}) {
         /> */}
       </div>
       <div className="my-2 gap-4 flex rounded border border-gray-200 bg-white p-1 justify-around">
-        {/* <ListDropDown
+      {/* <ListDropDown
           text="Motivo de viaje:"
           list={listTravel}
           handleChangeInputs={handleChange}
@@ -237,7 +238,7 @@ export default function Account({step}) {
           list={country}
           handleChangeInputs={handleChange}
           name="tIdentificadorSunat"
-        /> */}
+        /> */} 
       </div>
       <div className="my-2 gap-4 flex rounded border border-gray-200 bg-white p-1 justify-around">
         <TextField
@@ -248,7 +249,7 @@ export default function Account({step}) {
           onChange={handleChange}
           label='Ingrese Domicilio:'
           fullWidth
-          required
+          Vrequired
         />
         <TextField
           variant="standard"

@@ -1,17 +1,19 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Stepper from "../components/Stepper";
 import { useParams } from "react-router-dom";
 import StepperControl from "../components/StepperControl";
 import Account from "../components/steps/Account";
 import Final from "../components/steps/Final";
-import { UseContextProvider, useStepperContext } from "../contexts/StepperContext";
+import { UserContext } from "../contexts/StepperContext.jsx";
+// import { UseContextProvider } from "../contexts/StepperContext";
 import { storeForm } from "../components/service";
 import Swal from "sweetalert2";
 
 function Home() {
   const [currentStep, setCurrentStep] = useState(1);
   // const { listUser, values, setValues } = React.useContext(UserContext);
-  const { listUser, values, setValues, userData, setUserData, open, setOpen } = useStepperContext();
+  const {listUser, values, setValues, open, setOpen } = useContext(UserContext);
+  // const { listUser, values, setValues, userData, setUserData, open, setOpen } = useStepperContext();
   const params = useParams();
   const steps = [];
 
@@ -20,13 +22,13 @@ function Home() {
   }
 
   const displayStep = (step) => {
-    switch (step) {
-      default:
-        if (step === parseInt(params.numPassenger) + 1) {
-          return <Final />
-        }
-        return <Account step={step}/>;
-    }
+     switch (step) {
+       default:
+         if (step === parseInt(params.numPassenger) + 1) {
+           return <Final />
+         }
+         return <Account key={step}/>;
+     }
   };
 
   const fetchStoreForm = (id) => {
@@ -82,7 +84,12 @@ function Home() {
     direction === "next" ? newStep++ : newStep--;
     // check if steps are within bounds
     newStep > 0 && newStep <= steps.length && setCurrentStep(newStep);
-    fetchStoreForm()
+    listUser.push(values)
+    console.log(listUser);
+    setValues({}) 
+    
+    console.log(values);
+    // fetchStoreForm()
   };
 
   return (
@@ -92,7 +99,9 @@ function Home() {
         <div className="horizontal container mt-5 ">
           <Stepper steps={steps} currentStep={currentStep} />
           <div className="my-4 p-4">
-            <UseContextProvider>{displayStep(currentStep)}</UseContextProvider>
+         
+             {displayStep(currentStep)}
+         
           </div>
         </div>
 
@@ -102,6 +111,7 @@ function Home() {
             handleClick={handleClick}
             currentStep={currentStep}
             steps={steps}
+	    open={open}
           />
         )}
       </div>
